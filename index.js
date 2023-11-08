@@ -28,9 +28,22 @@ app.get("/api/hello", function (req, res) {
 app.get('/api/:id?', function (req, res) {
   if(req.params.id) {
     let inp = req.params.id;
-    if(!inp.includes('-')) inp = parseInt(inp);
-    let dt = new Date(inp);
-    console.log(dt);
+    if(!inp.includes('-')) {
+      inp = parseInt(inp);
+      timeArg = true;
+      let dt = new Date(inp);
+      res.json({unix: dt.getTime(), utc: dt.toUTCString()});
+    }
+    let args = inp.split('-');
+    let date_string = args[0];
+    let month = args[1];
+    if(month.length == 1) month = '0'+month;
+    date_string = date_string + '-' + month;
+    if(args[2] != undefined) {
+      if(args[2].length == 1) args[2] = '0'+args[2];
+      date_string = date_string + '-' + args[2];
+    }
+    let dt = new Date(date_string);
     if(dt == "Invalid Date") res.json({error: "Invalid Date"});
     else res.json({unix: dt.getTime(), utc: dt.toUTCString()});
   } else {
