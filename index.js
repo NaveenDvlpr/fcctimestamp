@@ -29,7 +29,9 @@ app.get("/api/:date", function (req, res) {
   let inp = req.params.date;
   if(!inp.includes('-')) inp = parseInt(inp);
   const dateOp = new Date(inp);
-  res.json({unix: dateOp.getTime(), utc: dateOp});
+  console.log(dateOp);
+  if(dateOp == "Invalid Date") res.json({"error":"Invalid Date"});
+  else res.json({unix: dateOp.getTime(), utc: dateOp});
 })
 
 // listen for requests :)
