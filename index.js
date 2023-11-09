@@ -28,24 +28,18 @@ app.get("/api/hello", function (req, res) {
 app.get('/api/:id?', function (req, res) {
   if(req.params.id) {
     let inp = req.params.id;
-    if(!inp.includes('-')) {
-      inp = parseInt(inp);
-      timeArg = true;
-      let dt = new Date(inp);
-      res.json({unix: dt.getTime(), utc: dt.toUTCString()});
-    }
-    let args = inp.split('-');
-    let date_string = args[0];
-    let month = args[1];
-    if(month.length == 1) month = '0'+month;
-    date_string = date_string + '-' + month;
-    if(args[2] != undefined) {
-      if(args[2].length == 1) args[2] = '0'+args[2];
-      date_string = date_string + '-' + args[2];
-    }
-    let dt = new Date(date_string);
+    if(!inp.includes('-')) inp = parseInt(inp);
+    let dt = new Date(inp);
     if(dt == "Invalid Date") res.json({error: "Invalid Date"});
-    else res.json({unix: dt.getTime(), utc: dt.toUTCString()});
+    else {
+      let args = inp.split('-');
+      if(args[1] == "01" || args[1] == "01" || args[1] == "02" || args[1] == "03" || args[1] == "04" || args[1] == "05" || args[1] == "06" || args[1] == "07" || args[1] == "08" || args[1] == "09" || args[1] == "10" || args[1] == "11" || args[1] == "12")
+      res.json({unix: dt.getTime(), utc: dt.toUTCString()});
+      else {
+        dt = new Date(dt.getTime() + 19800000);
+        res.json({unix: dt.getTime(), utc: dt.toUTCString()});
+      }
+    }
   } else {
     const dt = new Date();
     res.json({unix: dt.getTime(), utc: dt.toUTCString()});
