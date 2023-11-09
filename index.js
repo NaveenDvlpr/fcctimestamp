@@ -28,17 +28,18 @@ app.get("/api/hello", function (req, res) {
 app.get('/api/:id?', function (req, res) {
   if(req.params.id) {
     let inp = req.params.id;
-    if(!inp.includes('-')) inp = parseInt(inp);
+    let timeArg = Number(inp);
+    if(timeArg) inp = parseInt(inp);
     let dt = new Date(inp);
     if(dt == "Invalid Date") res.json({error: "Invalid Date"});
     else {
-      let args = inp.split('-');
-      if(args[1] == "01" || args[1] == "01" || args[1] == "02" || args[1] == "03" || args[1] == "04" || args[1] == "05" || args[1] == "06" || args[1] == "07" || args[1] == "08" || args[1] == "09" || args[1] == "10" || args[1] == "11" || args[1] == "12")
+      if(!timeArg) {
+        let args=inp.split('-');
+        let toAdd = true;
+        if(args[1] == "01" || args[1] == "01" || args[1] == "02" || args[1] == "03" || args[1] == "04" || args[1] == "05" || args[1] == "06" || args[1] == "07" || args[1] == "08" || args[1] == "09" || args[1] == "10" || args[1] == "11" || args[1] == "12") toAdd = false;
+          if(toAdd) dt = new Date(dt.getTime() + 19800000);
+        }
       res.json({unix: dt.getTime(), utc: dt.toUTCString()});
-      else {
-        dt = new Date(dt.getTime() + 19800000);
-        res.json({unix: dt.getTime(), utc: dt.toUTCString()});
-      }
     }
   } else {
     const dt = new Date();
