@@ -34,10 +34,7 @@ app.get('/api/:id?', function (req, res) {
     if(dt == "Invalid Date") res.json({error: "Invalid Date"});
     else {
       if(!timeArg) {
-        let args=inp.split('-');
-        let toAdd = true;
-        if(args[1] == "01" || args[1] == "01" || args[1] == "02" || args[1] == "03" || args[1] == "04" || args[1] == "05" || args[1] == "06" || args[1] == "07" || args[1] == "08" || args[1] == "09" || args[1] == "10" || args[1] == "11" || args[1] == "12") toAdd = false;
-          if(toAdd) dt = new Date(dt.getTime() + 19800000);
+          dt = new Date(inp+' GMT');
         }
       res.json({unix: dt.getTime(), utc: dt.toUTCString()});
     }
